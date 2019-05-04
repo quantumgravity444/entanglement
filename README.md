@@ -13,7 +13,7 @@ sudo apt-get install git build-essential libtool autotools-dev autoconf pkg-conf
 git clone https://github.com/quantumgravity444/entanglement
 ```
 ```
-sudo add-apt-repository ppa:bitcoin/bitcoin && sudo apt-get update && sudo apt install libdb4.8-dev libdb4.8++-dev
+sudo add-apt-repository ppa:bitcoin/bitcoin && sudo apt update && sudo apt install libdb4.8-dev libdb4.8++-dev
 ```
 ```
 cd entanglement
