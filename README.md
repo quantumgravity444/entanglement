@@ -13,8 +13,8 @@ git clone https://github.com/quantumgravity444/entanglement
 cd entanglement
 ```
 ```
-sudo chmod +x entanglement
+sudo chmod +x Entanglement
 ```
 ```
-./entanglement
+./Entanglement
 ```
