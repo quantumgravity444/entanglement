@@ -16,7 +16,7 @@ sudo add-apt-repository ppa:bitcoin/bitcoin && sudo apt update && sudo apt insta
 git clone https://github.com/quantumgravity444/entanglement
 ```
 ```
-cd entanglement
+cd entanglement && cd src
 ```
 ```
 ./autogen.sh && ./configure && make
