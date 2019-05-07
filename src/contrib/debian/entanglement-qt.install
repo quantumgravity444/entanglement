@@ -1,0 +1,6 @@
+usr/local/bin/entanglement-qt usr/bin
+share/pixmaps/entanglement32.xpm usr/share/pixmaps
+share/pixmaps/entanglement16.xpm usr/share/pixmaps
+share/pixmaps/entanglement128.png usr/share/pixmaps
+debian/entanglement-qt.desktop usr/share/applications
+debian/entanglement-qt.protocol usr/share/kde4/services/

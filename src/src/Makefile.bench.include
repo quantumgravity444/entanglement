@@ -1,0 +1,58 @@
+# Copyright (c) 2015-2017 The Bitcoin Core developers
+# Copyright (c) 2017 The Entanglement developers
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+bin_PROGRAMS += bench/bench_entanglement
+BENCH_SRCDIR = bench
+BENCH_BINARY = bench/bench_entanglement$(EXEEXT)
+
+
+bench_bench_entanglement_SOURCES = \
+  bench/bench_entanglement.cpp \
+  bench/bench.cpp \
+  bench/bench.h \
+  bench/Examples.cpp \
+  bench/rollingbloom.cpp \
+  bench/crypto_hash.cpp \
+  bench/ccoins_caching.cpp \
+  bench/mempool_eviction.cpp \
+  bench/verify_script.cpp \
+  bench/base58.cpp
+
+bench_bench_entanglement_CPPFLAGS = $(AM_CPPFLAGS) $(ENTANGLEMENT_INCLUDES) $(EVENT_CLFAGS) $(EVENT_PTHREADS_CFLAGS) -I$(builddir)/bench/
+bench_bench_entanglement_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+bench_bench_entanglement_LDADD = \
+  $(LIBENTANGLEMENT_SERVER) \
+  $(LIBENTANGLEMENT_COMMON) \
+  $(LIBENTANGLEMENT_UTIL) \
+  $(LIBENTANGLEMENT_CONSENSUS) \
+  $(LIBENTANGLEMENT_CRYPTO) \
+  $(LIBLEVELDB) \
+  $(LIBMEMENV) \
+  $(LIBSECP256K1) \
+  $(LIBUNIVALUE)
+
+if ENABLE_ZMQ
+bench_bench_entanglement_LDADD += $(LIBENTANGLEMENT_ZMQ) $(ZMQ_LIBS)
+endif
+
+if ENABLE_WALLET
+bench_bench_entanglement_SOURCES += bench/coin_selection.cpp
+bench_bench_entanglement_LDADD += $(LIBENTANGLEMENT_WALLET) $(LIBENTANGLEMENT_CRYPTO)
+endif
+
+bench_bench_entanglement_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS)
+bench_bench_entanglement_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+
+CLEAN_ENTANGLEMENT_BENCH = bench/*.gcda bench/*.gcno
+
+CLEANFILES += $(CLEAN_ENTANGLEMENT_BENCH)
+
+entanglement_bench: $(BENCH_BINARY)
+
+bench: $(BENCH_BINARY) FORCE
+	$(BENCH_BINARY)
+
+entanglement_bench_clean : FORCE
+	rm -f $(CLEAN_ENTANGLEMENT_BENCH) $(bench_bench_entanglement_OBJECTS) $(BENCH_BINARY)

@@ -1,0 +1,22 @@
+[Unit]
+Description=entanglement's distributed currency daemon
+After=network.target
+
+[Service]
+User=entanglement
+Group=entanglement
+
+Type=forking
+PIDFile=/var/lib/entanglementd/entanglementd.pid
+ExecStart=/usr/bin/entanglementd -daemon -pid=/var/lib/entanglementd/entanglementd.pid \
+-conf=/etc/entanglement/entanglement.conf -datadir=/var/lib/entanglementd -disablewallet
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,27 @@
+# /etc/conf.d/entanglementd: config file for /etc/init.d/entanglementd
+
+# Config file location
+#ENTANGLEMENTD_CONFIGFILE="/etc/entanglement/entanglement.conf"
+
+# What directory to write pidfile to?  (created and owned by $ENTANGLEMENTD_USER)
+#ENTANGLEMENTD_PIDDIR="/var/run/entanglementd"
+
+# What filename to give the pidfile
+#ENTANGLEMENTD_PIDFILE="${ENTANGLEMENTD_PIDDIR}/entanglementd.pid"
+
+# Where to write entanglementd data (be mindful that the blockchain is large)
+#ENTANGLEMENTD_DATADIR="/var/lib/entanglementd"
+
+# User and group to own entanglementd process
+#ENTANGLEMENTD_USER="entanglement"
+#ENTANGLEMENTD_GROUP="entanglement"
+
+# Path to entanglementd executable
+#ENTANGLEMENTD_BIN="/usr/bin/entanglementd"
+
+# Nice value to run entanglementd under
+#ENTANGLEMENTD_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+ENTANGLEMENTD_OPTS="-disablewallet"
+

@@ -1,0 +1,86 @@
+#!/sbin/runscript
+
+# backward compatibility for existing gentoo layout 
+#
+if [ -d "/var/lib/entanglement/.entanglement" ]; then
+	ENTANGLEMENTD_DEFAULT_DATADIR="/var/lib/entanglement/.entanglement"
+else
+	ENTANGLEMENTD_DEFAULT_DATADIR="/var/lib/entanglementd"
+fi
+
+ENTANGLEMENTD_CONFIGFILE=${ENTANGLEMENTD_CONFIGFILE:-/etc/entanglement/entanglement.conf}
+ENTANGLEMENTD_PIDDIR=${ENTANGLEMENTD_PIDDIR:-/var/run/entanglementd}
+ENTANGLEMENTD_PIDFILE=${ENTANGLEMENTD_PIDFILE:-${ENTANGLEMENTD_PIDDIR}/entanglementd.pid}
+ENTANGLEMENTD_DATADIR=${ENTANGLEMENTD_DATADIR:-${ENTANGLEMENTD_DEFAULT_DATADIR}}
+ENTANGLEMENTD_USER=${ENTANGLEMENTD_USER:-entanglement}
+ENTANGLEMENTD_GROUP=${ENTANGLEMENTD_GROUP:-entanglement}
+ENTANGLEMENTD_BIN=${ENTANGLEMENTD_BIN:-/usr/bin/entanglementd}
+
+name="Entanglement Daemon"
+description="entanglement crypto-currency p2p network daemon"
+
+command="/usr/bin/entanglementd"
+command_args="-pid=\"${ENTANGLEMENTD_PIDFILE}\" \
+		-conf=\"${ENTANGLEMENTD_CONFIGFILE}\" \
+		-datadir=\"${ENTANGLEMENTD_DATADIR}\" \
+		-daemon \
+		${ENTANGLEMENTD_OPTS}"
+
+required_files="${ENTANGLEMENTD_CONFIGFILE}"
+start_stop_daemon_args="-u ${ENTANGLEMENTD_USER} \
+			-N ${ENTANGLEMENTD_NICE:-0} -w 2000"
+pidfile="${ENTANGLEMENTD_PIDFILE}"
+retry=60
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${ENTANGLEMENTD_USER}:${ENTANGLEMENTD_GROUP}" \
+	"${ENTANGLEMENTD_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${ENTANGLEMENTD_USER}:${ENTANGLEMENTD_GROUP}" \
+	"${ENTANGLEMENTD_PIDDIR}"
+
+	checkpath -f \
+	-o ${ENTANGLEMENTD_USER}:${ENTANGLEMENTD_GROUP} \
+	-m 0660 \
+	${ENTANGLEMENTD_CONFIGFILE}
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if ! grep -qs '^rpcpassword=' "${ENTANGLEMENTD_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run entanglementd."
+		eerror "The setting must appear in ${ENTANGLEMENTD_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following"
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is also recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"entanglement Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}

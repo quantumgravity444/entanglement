@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=entanglement
+Comment=entanglement P2P Cryptocurrency
+Comment[fr]=entanglement, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=entanglement, eşten eşe kriptografik sanal para birimi
+Exec=entanglement-qt %u
+Terminal=false
+Type=Application
+Icon=entanglement128
+MimeType=x-scheme-handler/entanglement;
+Categories=Office;Finance;
