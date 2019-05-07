@@ -19,7 +19,7 @@ git clone https://github.com/quantumgravity444/entanglement
 cd entanglement
 ```
 ```
-sudo chmod +x Entanglement
+./autogen.sh && ./configure && make
 ```
 ```
 ./Entanglement
