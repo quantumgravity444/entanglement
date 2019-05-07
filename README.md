@@ -22,5 +22,5 @@ cd entanglement
 ./autogen.sh && ./configure && make
 ```
 ```
-./Entanglement
+./src/Entanglement
 ```
