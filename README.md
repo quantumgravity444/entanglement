@@ -22,5 +22,8 @@ cd entanglement
 ./autogen.sh && ./configure && make
 ```
 ```
-./src/Entanglement
+cd src && sudo chmod +x Entanglement
+```
+```
+./Entanglement
 ```
