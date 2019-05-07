@@ -2,7 +2,7 @@
 
 entanglement is a counting machine
 
-## instructions for ubuntu 16.04
+## instructions for ubuntu 16.04 LTS
 
 use the terminal
 
